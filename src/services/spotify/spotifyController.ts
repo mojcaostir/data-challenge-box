@@ -1,7 +1,7 @@
 import { spotifyService } from "./spotifyService";
-import { createLogger } from "../util/logger";
 import { Request, Response } from "express";
-import { IResponseBody, IResponseData } from "../models";
+import { createLogger } from "../../util/logger";
+import { IResponseBody, IResponseData } from "../../models";
 
 const logger = createLogger("Spotify Controller Logger");
 

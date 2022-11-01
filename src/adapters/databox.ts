@@ -1,17 +1,19 @@
 import { config } from "../config";
 import { createLogger } from "../util/logger";
-import { IDataboxResponse, IMetrics } from "../models";
+import { IDataboxResponse, IMetrics, ServiceProvider } from "../models";
 
 const Databox = require("databox");
 
 const logger = createLogger("Databox Adapter Logger");
 
-const client = new Databox({
-  push_token: config.databoxToken,
-});
-
-export async function sendMetricsToDatabox(metrics: IMetrics[]): Promise<IDataboxResponse> {
+export async function sendMetricsToDatabox(
+  metrics: IMetrics[],
+  serviceProvider: ServiceProvider
+): Promise<IDataboxResponse> {
   logger.debug("Sending metrics to Databox", { metrics });
+  const client = new Databox({
+    push_token: serviceProvider === "Github" ? config.databoxTokenGithub : config.databoxTokenSpotify,
+  });
   return new Promise((resolve, reject) => {
     client.insertAll(metrics, (response: IDataboxResponse) => {
       if (response.status !== "OK") {

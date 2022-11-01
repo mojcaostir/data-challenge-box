@@ -1,9 +1,9 @@
-import { sendMetricsToDatabox } from "../adapters/databox";
-import { getGithubMetric } from "../adapters/github";
-import { getDateTimeYesterdayMidnight } from "../util/dateTime";
-import { createLogger } from "../util/logger";
 import { DateTime } from "luxon";
-import { GithubMetricKey, IMetrics, IResponseData } from "../models";
+import { createLogger } from "../../util/logger";
+import { GithubMetricKey, IMetrics, IResponseData } from "../../models";
+import { sendMetricsToDatabox } from "../../adapters/databox";
+import { getDateTimeYesterdayMidnight } from "../../util/dateTime";
+import { getGithubMetric } from "../../adapters/github";
 
 const logger = createLogger("Github Service Logger");
 
@@ -43,7 +43,7 @@ export async function githubService(
     metrics.push({ key: input.key, value: githubMetric.length });
   }
   try {
-    await sendMetricsToDatabox(metrics);
+    await sendMetricsToDatabox(metrics, "Github");
     return {
       serviceProvider: "Github",
       sentAt: DateTime.utc().toISO(),

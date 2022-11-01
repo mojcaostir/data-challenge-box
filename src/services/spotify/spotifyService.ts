@@ -1,8 +1,8 @@
-import { sendMetricsToDatabox } from "../adapters/databox";
-import { getSpotifyMetric } from "../adapters/spotify";
-import { createLogger } from "../util/logger";
-import { IMetrics, IResponseData, SpotifyMetricKey } from "../models";
 import { DateTime } from "luxon";
+import { createLogger } from "../../util/logger";
+import { sendMetricsToDatabox } from "../../adapters/databox";
+import { IMetrics, IResponseData, SpotifyMetricKey } from "../../models";
+import { getSpotifyMetric } from "../../adapters/spotify";
 
 const logger = createLogger("Spotify Service Logger");
 
@@ -36,7 +36,7 @@ export async function spotifyService(inputArray: { url: string; key: SpotifyMetr
     }
   }
   try {
-    await sendMetricsToDatabox(metrics);
+    await sendMetricsToDatabox(metrics, "Spotify");
     return {
       serviceProvider: "Spotify",
       sentAt: DateTime.utc().toISO(),

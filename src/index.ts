@@ -1,4 +1,4 @@
-import { createLogger } from "./logger/logger";
+import { createLogger } from "./util/logger";
 import { initServer } from "./server";
 
 const logger = createLogger("Main Service Logger");

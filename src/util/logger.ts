@@ -1,8 +1,65 @@
-import { pinoHttp } from "pino-http";
 import pino, { SerializedRequest } from "pino";
-import type { IncomingMessage } from "http";
+import type { IncomingMessage, ServerResponse } from "http";
+import { config, LogLevel } from "../config";
+import { pinoHttp } from "pino-http";
 import { v4 as uuid } from "uuid";
-import { LogLevel } from "../config";
+
+export function createLogger(name: string): Logger {
+  const logger = pino({
+    timestamp: pino.stdTimeFunctions.isoTime,
+    level: config.logLevel,
+    messageKey: "msg",
+    errorKey: "err",
+    base: {},
+    transport: config.logFormat === "pretty" ? { target: "pino-pretty" } : undefined,
+  }).child({ logger: name });
+
+  return {
+    trace: (msg, meta) => logger.trace({ meta }, msg),
+    debug: (msg, meta) => logger.debug({ meta }, msg),
+    info: (msg, meta) => logger.info({ meta }, msg),
+    warn: (msg, meta) => logger.warn({ meta }, msg),
+    error: (msg, err, meta) => logger.error({ err, meta }, msg),
+    http: (req, res) => {
+      const httpLogger = createHTTPLogger(logger);
+      httpLogger(req, res);
+    },
+  };
+}
+
+function createHTTPLogger(logger: pino.Logger) {
+  return pinoHttp({
+    logger,
+    redact: ["req.query", ...requestHeaders, ...owaspSecureResponseHeaders],
+    customSuccessMessage: function (req, res) {
+      if (res.statusCode === 404) {
+        return "Resource not found";
+      }
+      return `${req.method} request completed`;
+    },
+    genReqId: function (req) {
+      req.id = req.headers["x-request-id"] || uuid();
+      return req.id;
+    },
+    serializers: {
+      req: reqSerializer([reqUrlSerializer, reqBodySerializer], logger),
+    },
+  });
+}
+
+interface Logger {
+  trace(msg: string, meta?: Record<string, unknown>): void;
+
+  debug(msg: string, meta?: Record<string, unknown>): void;
+
+  info(msg: string, meta?: Record<string, unknown>): void;
+
+  warn(msg: string, meta?: Record<string, unknown>): void;
+
+  error(msg: string, err: Error, meta?: Record<string, unknown>): void;
+
+  http(req: IncomingMessage, res: ServerResponse): void;
+}
 
 interface PinoRequest extends SerializedRequest {
   body?: unknown;
@@ -65,18 +122,4 @@ function reqBodySerializer(req: PinoRequest, logger: pino.Logger): PinoRequest {
   }
 
   return req;
-}
-
-export function createHTTPLogger(logger: pino.Logger) {
-  return pinoHttp({
-    logger,
-    redact: ["req.query", ...requestHeaders, ...owaspSecureResponseHeaders],
-    genReqId: function (req) {
-      req.id = req.headers["x-request-id"] || uuid();
-      return req.id;
-    },
-    serializers: {
-      req: reqSerializer([reqUrlSerializer, reqBodySerializer], logger),
-    },
-  });
 }

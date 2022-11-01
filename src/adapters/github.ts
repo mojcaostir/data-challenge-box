@@ -14,7 +14,7 @@ export async function getGithubMetric(
   repo: string,
   dateTime?: string
 ): Promise<unknown[]> {
-  logger.trace("Sending request to GitHub", { endpoint, owner, repo, dateTime });
+  logger.debug("Sending request to GitHub", { endpoint, owner, repo, dateTime });
   const reqEndpoint = dateTime
     ? `GET /repos/${owner}/${repo}/${endpoint}?since=${dateTime}`
     : `GET /repos/${owner}/${repo}/${endpoint}`;

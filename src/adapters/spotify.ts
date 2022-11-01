@@ -6,7 +6,7 @@ import { ISpotifyResponse } from "../models";
 const logger = createLogger("Spotify Adapter Logger");
 
 export async function getSpotifyMetric(url: string): Promise<ISpotifyResponse> {
-  logger.trace("Sending authorization request to Spotify ");
+  logger.debug("Sending authorization request to Spotify ");
   const spotifyResponseToken = await axios.post(
     "https://accounts.spotify.com/api/token",
     { grant_type: "client_credentials" },

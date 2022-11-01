@@ -8,6 +8,7 @@ export enum LogLevel {
 
 export const config = {
   logLevel: getAllowedConfig<LogLevel>("LOG_LEVEL", Object.values(LogLevel), LogLevel.Info),
+  cronExpression: getConfig("CRON_EXPRESSION"),
   gitHubToken: getConfig("GITHUB_PERSONAL_ACCESS_TOKEN"),
   spotifyClientId: getConfig("SPOTIFY_CLIENT_ID"),
   spotifyClientSecret: getConfig("SPOTIFY_CLIENT_SECRET"),

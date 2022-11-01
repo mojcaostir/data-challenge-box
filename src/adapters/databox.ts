@@ -11,7 +11,7 @@ const client = new Databox({
 });
 
 export async function sendMetricsToDatabox(metrics: IMetrics[]): Promise<IDataboxResponse> {
-  logger.trace("Sending metrics to Databox", { metrics });
+  logger.debug("Sending metrics to Databox", { metrics });
   return new Promise((resolve, reject) => {
     client.insertAll(metrics, (response: IDataboxResponse) => {
       if (response.status !== "OK") {

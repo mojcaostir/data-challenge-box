@@ -6,14 +6,8 @@ export enum LogLevel {
   Trace = "trace",
 }
 
-export enum LogFormat {
-  Pretty = "pretty",
-  Json = "json",
-}
-
 export const config = {
   logLevel: getAllowedConfig<LogLevel>("LOG_LEVEL", Object.values(LogLevel), LogLevel.Info),
-  logFormat: getAllowedConfig<LogFormat>("LOG_FORMAT", Object.values(LogFormat), LogFormat.Json),
   gitHubToken: getConfig("GITHUB_PERSONAL_ACCESS_TOKEN"),
   spotifyClientId: getConfig("SPOTIFY_CLIENT_ID"),
   spotifyClientSecret: getConfig("SPOTIFY_CLIENT_SECRET"),

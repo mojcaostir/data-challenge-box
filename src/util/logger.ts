@@ -11,7 +11,7 @@ export function createLogger(name: string): Logger {
     messageKey: "msg",
     errorKey: "err",
     base: {},
-    transport: config.logFormat === "pretty" ? { target: "pino-pretty" } : undefined,
+    transport: { target: "pino/file", options: { destination: "log" } },
   }).child({ logger: name });
 
   return {

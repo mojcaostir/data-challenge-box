@@ -18,7 +18,7 @@ export async function initServer(): Promise<void> {
 
     app
       .get("/", (_req, res) => {
-        logger.info(`Get request on root`);
+        logger.debug(`Get request on root`);
         res.sendStatus(200);
       })
       .use(express.json())
@@ -31,7 +31,7 @@ export async function initServer(): Promise<void> {
       .use("/data-challenge-box/api/v1/github", githubRouter)
       .use("/data-challenge-box/api/v1/spotify", spotifyRouter)
       .listen(8000, () => {
-        logger.info(`DataChallengeBox server listening on port 8000`);
+        logger.debug(`DataChallengeBox server listening on port 8000`);
       });
   } catch (e: unknown) {
     logger.error("Error starting server", new Error(e as undefined));

@@ -17,11 +17,8 @@ export async function allMetricsController(_req: Request, res: Response): Promis
     ]);
 
     if (response.sent) {
-      logger.info("Spotify metrics sent");
-      logger.debug("Spotify metrics response", { response });
       return res.status(200).json({ response });
     } else {
-      logger.error("Spotify metrics were not sent to Databox", new Error(JSON.stringify(response)));
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {
@@ -40,11 +37,8 @@ export async function categoryPlaylistsController(_req: Request, res: Response) 
     ]);
 
     if (response.sent) {
-      logger.info("Spotify category playlists metric sent");
-      logger.debug("Spotify category playlists metric response", { response });
       return res.status(200).json({ response });
     } else {
-      logger.error("Spotify category playlists metric was not sent to Databox", new Error(JSON.stringify(response)));
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {
@@ -60,11 +54,8 @@ export async function playlistItemsController(_req: Request, res: Response) {
     ]);
 
     if (response.sent) {
-      logger.info("Spotify playlist items metric sent");
-      logger.debug("Spotify playlist items metric response", { response });
       return res.status(200).json({ response });
     } else {
-      logger.error("Spotify playlist items metric was not sent to Databox", new Error(JSON.stringify(response)));
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {
@@ -80,11 +71,8 @@ export async function userPlaylistsController(_req: Request, res: Response) {
     ]);
 
     if (response.sent) {
-      logger.info("Spotify user playlists metric sent");
-      logger.debug("Spotify user playlists metric response", { response });
       return res.status(200).json({ response });
     } else {
-      logger.error("Spotify user playlists metric was not sent to Databox", new Error(JSON.stringify(response)));
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {

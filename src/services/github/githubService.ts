@@ -27,8 +27,7 @@ export async function githubService(
     try {
       githubMetric = await getGithubMetric(input.endpoint, input.owner, input.repo, dateTimeYesterdayMidnight);
     } catch (e: unknown) {
-      logger.error("Error getting metrics from github", new Error(e as string));
-      return {
+      const response: IResponseData = {
         serviceProvider: "Github",
         sentAt: DateTime.utc().toISO(),
         metrics: [],
@@ -36,6 +35,8 @@ export async function githubService(
         sent: false,
         errorMessage: "Error getting metrics from github",
       };
+      logger.error("Error getting metrics from github", new Error(e as string), { response });
+      return response;
     }
 
     metricsCount += 1;
@@ -44,15 +45,17 @@ export async function githubService(
   }
   try {
     await sendMetricsToDatabox(metrics, "Github");
-    return {
+    const response: IResponseData = {
       serviceProvider: "Github",
       sentAt: DateTime.utc().toISO(),
       metrics: metricsKeys,
       metricsCount,
       sent: true,
     };
+    logger.info("Github metrics sent", { response });
+    return response;
   } catch (e) {
-    return {
+    const response: IResponseData = {
       serviceProvider: "Github",
       sentAt: DateTime.utc().toISO(),
       metrics: [],
@@ -60,5 +63,7 @@ export async function githubService(
       sent: false,
       errorMessage: "Error sending metrics to Databox",
     };
+    logger.error("Github metrics were not sent to Databox", new Error(e as undefined), { response });
+    return response;
   }
 }

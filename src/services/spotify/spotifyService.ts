@@ -16,8 +16,7 @@ export async function spotifyService(inputArray: { url: string; key: SpotifyMetr
     try {
       spotifyMetric = await getSpotifyMetric(input.url);
     } catch (e: unknown) {
-      logger.error("Error getting metrics from spotify", new Error(e as string));
-      return {
+      const response: IResponseData = {
         serviceProvider: "Spotify",
         sentAt: DateTime.utc().toISO(),
         metrics: [],
@@ -25,6 +24,8 @@ export async function spotifyService(inputArray: { url: string; key: SpotifyMetr
         sent: false,
         errorMessage: "Error getting metrics from spotify",
       };
+      logger.error("Error getting metrics from spotify", new Error(e as string), { response });
+      return response;
     }
 
     metricsCount += 1;
@@ -37,15 +38,17 @@ export async function spotifyService(inputArray: { url: string; key: SpotifyMetr
   }
   try {
     await sendMetricsToDatabox(metrics, "Spotify");
-    return {
+    const response: IResponseData = {
       serviceProvider: "Spotify",
       sentAt: DateTime.utc().toISO(),
       metrics: metricsKeys,
       metricsCount,
       sent: true,
     };
+    logger.info("Spotify metrics sent", { response });
+    return response;
   } catch (e) {
-    return {
+    const response: IResponseData = {
       serviceProvider: "Spotify",
       sentAt: DateTime.utc().toISO(),
       metrics: [],
@@ -53,5 +56,7 @@ export async function spotifyService(inputArray: { url: string; key: SpotifyMetr
       sent: false,
       errorMessage: "Error sending metrics to Databox",
     };
+    logger.error("Spotify metrics were not sent to Databox", new Error(e as undefined), { response });
+    return response;
   }
 }

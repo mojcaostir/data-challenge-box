@@ -17,8 +17,10 @@ export async function allMetricsController(_req: Request, res: Response): Promis
     ]);
 
     if (response.sent) {
+      logger.info("Spotify metrics sent", { response });
       return res.status(200).json({ response });
     } else {
+      logger.error("Spotify metrics were not sent to Databox", new Error(JSON.stringify(response)), { response });
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {
@@ -37,8 +39,10 @@ export async function categoryPlaylistsController(_req: Request, res: Response) 
     ]);
 
     if (response.sent) {
+      logger.info("Spotify metrics sent", { response });
       return res.status(200).json({ response });
     } else {
+      logger.error("Spotify metrics were not sent to Databox", new Error(JSON.stringify(response)), { response });
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {
@@ -54,8 +58,10 @@ export async function playlistItemsController(_req: Request, res: Response) {
     ]);
 
     if (response.sent) {
+      logger.info("Spotify metrics sent", { response });
       return res.status(200).json({ response });
     } else {
+      logger.error("Spotify metrics were not sent to Databox", new Error(JSON.stringify(response)), { response });
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {
@@ -71,8 +77,10 @@ export async function userPlaylistsController(_req: Request, res: Response) {
     ]);
 
     if (response.sent) {
+      logger.info("Spotify metrics sent", { response });
       return res.status(200).json({ response });
     } else {
+      logger.error("Spotify metrics were not sent to Databox", new Error(JSON.stringify(response)), { response });
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {

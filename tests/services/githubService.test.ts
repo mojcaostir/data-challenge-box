@@ -1,6 +1,6 @@
-import { githubService } from "../../../src/services/github/githubService";
-import * as octokit from "../../../src/adapters/github";
-import * as databox from "../../../src/adapters/databox";
+import { githubService } from "../../src/services/github/githubService";
+import * as octokit from "../../src/adapters/github";
+import * as databox from "../../src/adapters/databox";
 
 describe("githubService function", () => {
   afterEach(() => {

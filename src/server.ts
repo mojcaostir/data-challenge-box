@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { createLogger } from "./util/logger";
 import { config } from "./config";
 import { spotifyRouter } from "./services/spotify/spotifyRouter";
-import { cronjobService } from "./services/cronjob/cronjob";
+import { cronjobService } from "./services/cronjob/cronjobService";
 import { githubRouter } from "./services/github/githubRouter";
 
 const logger = createLogger("DataChallengeBox Server");

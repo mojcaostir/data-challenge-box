@@ -14,8 +14,10 @@ export async function allRepoMetricsController(_req: Request, res: Response): Pr
     ]);
 
     if (response.sent) {
+      logger.info("Github metrics sent", { response });
       return res.status(200).json({ response });
     } else {
+      logger.error("Error getting metrics from github", new Error(JSON.stringify(response)), { response });
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {
@@ -31,8 +33,10 @@ export async function repoCommentsController(_req: Request, res: Response): Prom
     ]);
 
     if (response.sent) {
+      logger.info("Github metrics sent", { response });
       return res.status(200).json({ response });
     } else {
+      logger.error("Github metrics were not sent to Databox", new Error(JSON.stringify(response)), { response });
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {
@@ -48,8 +52,10 @@ export async function repoReleasesController(_req: Request, res: Response): Prom
     ]);
 
     if (response.sent) {
+      logger.info("Github metrics sent", { response });
       return res.status(200).json({ response });
     } else {
+      logger.error("Github metrics were not sent to Databox", new Error(JSON.stringify(response)), { response });
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {
@@ -65,8 +71,10 @@ export async function repoStarsController(_req: Request, res: Response): Promise
     ]);
 
     if (response.sent) {
+      logger.info("Github metrics sent", { response });
       return res.status(200).json({ response });
     } else {
+      logger.error("Github metrics were not sent to Databox", new Error(JSON.stringify(response)), { response });
       return res.status(404).json({ response });
     }
   } catch (e: unknown) {

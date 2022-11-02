@@ -1,10 +1,7 @@
 import { DateTime } from "luxon";
-import { createLogger } from "../../util/logger";
 import { sendMetricsToDatabox } from "../../adapters/databox";
 import { IMetrics, IResponseData, SpotifyMetricKey } from "../../models";
 import { getSpotifyMetric } from "../../adapters/spotify";
-
-const logger = createLogger("Spotify Service Logger");
 
 export async function spotifyService(inputArray: { url: string; key: SpotifyMetricKey }[]): Promise<IResponseData> {
   let metricsCount = 0;
@@ -16,7 +13,7 @@ export async function spotifyService(inputArray: { url: string; key: SpotifyMetr
     try {
       spotifyMetric = await getSpotifyMetric(input.url);
     } catch (e: unknown) {
-      const response: IResponseData = {
+      return {
         serviceProvider: "Spotify",
         sentAt: DateTime.utc().toISO(),
         metrics: [],
@@ -24,8 +21,6 @@ export async function spotifyService(inputArray: { url: string; key: SpotifyMetr
         sent: false,
         errorMessage: "Error getting metrics from spotify",
       };
-      logger.error("Error getting metrics from spotify", new Error(e as string), { response });
-      return response;
     }
 
     metricsCount += 1;
@@ -38,17 +33,15 @@ export async function spotifyService(inputArray: { url: string; key: SpotifyMetr
   }
   try {
     await sendMetricsToDatabox(metrics, "Spotify");
-    const response: IResponseData = {
+    return {
       serviceProvider: "Spotify",
       sentAt: DateTime.utc().toISO(),
       metrics: metricsKeys,
       metricsCount,
       sent: true,
     };
-    logger.info("Spotify metrics sent", { response });
-    return response;
   } catch (e) {
-    const response: IResponseData = {
+    return {
       serviceProvider: "Spotify",
       sentAt: DateTime.utc().toISO(),
       metrics: [],
@@ -56,7 +49,5 @@ export async function spotifyService(inputArray: { url: string; key: SpotifyMetr
       sent: false,
       errorMessage: "Error sending metrics to Databox",
     };
-    logger.error("Spotify metrics were not sent to Databox", new Error(e as undefined), { response });
-    return response;
   }
 }

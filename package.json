@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rm -rf build && tsc -p tsconfig.build.json",
-    "start": "node -r ts-node/register -r dotenv/config ./src/index.ts dotenv_config_path=./setup/.env",
+    "start": "node -r ts-node/register -r dotenv/config ./src/index.ts dotenv_config_path=./.env",
     "lint": "eslint . --ext .ts --fix --quiet",
     "test": "jest --detectOpenHandles"
   },
